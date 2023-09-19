@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, FlatList } from "react-native";
+import { View, Text, StyleSheet, Alert, FlatList, Dimensions } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import Title from '../components/ui/Title';
 import InestructionText from '../components/ui/InestructionText';
@@ -100,11 +100,12 @@ const GameScreen = ({ userNumber, onGameOver }) => {
 }
 
 export default GameScreen;
-
+const deviceWidth = Dimensions.get('window').width; 
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        padding: 24
+        padding: 24,
+        alignItems: 'center'
     },
     buttonsContainer: {
         flexDirection: 'row'
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: 24,
         padding: 16,
-        marginTop: 36,
+        marginTop: deviceWidth < 380 ? 18: 36,
         backgroundColor: Colors.primary800,
         borderRadius: 8,
         elevation: 10, // andoriod boxshadow
