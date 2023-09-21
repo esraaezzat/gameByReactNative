@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     container:{
         borderWidth: 4,
         borderColor: Colors.accent500,
-        padding: deviceWidth < 380 ? 12: 24,  //deviceWidth / 10 
+        padding: deviceWidth < 380 ? 24 : 5,  //deviceWidth / 10 
         margin: deviceWidth < 380 ? 12: 24,
         borderRadius: 8,
         alignItems: 'center',
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     },
     numberText:{
         color: Colors.accent500,
-        fontSize: deviceWidth < 380 ? 28: 36,
+        fontSize: deviceWidth < 380 ? 28: 24,
         // fontWeight: 'bold'
         fontFamily: 'open-sans-bold'
        }

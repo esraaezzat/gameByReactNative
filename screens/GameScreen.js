@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, FlatList, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Alert, FlatList, Dimensions, useWindowDimensions } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import Title from '../components/ui/Title';
 import InestructionText from '../components/ui/InestructionText';
@@ -8,6 +8,7 @@ import PrimaryButton from '../components/ui/PrimaryButton';
 import Card from '../components/ui/Card';
 import GuessLogItem from '../components/game/GuessLogItem';
 import Colors from '../constants/Colors';
+import { Fragment } from 'react';
 
 const generateRandomBetween = (min, max, exclude) => {
     const rndNumber = Math.floor(Math.random() * (max - min)) + min;
@@ -32,6 +33,7 @@ const GameScreen = ({ userNumber, onGameOver }) => {
         userNumber);
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
     const [guessRounds, setGuessRounds] = useState([initialGuess]);
+    const { width, height } = useWindowDimensions();
 
     useEffect(() => {
         if (currentGuess === userNumber) {
@@ -66,8 +68,10 @@ const GameScreen = ({ userNumber, onGameOver }) => {
 
     const guessRoundsListLength = guessRounds.length;
 
-    return <View style={styles.screen}>
-        <Title>Opponent's Guess</Title>
+
+
+
+    let content = <Fragment>
         <NumberContainer>{currentGuess}</NumberContainer>
         <View style={styles.cardStyle}>
             <InestructionText style={styles.inestructionText}>Heighr or lower?</InestructionText>
@@ -84,7 +88,31 @@ const GameScreen = ({ userNumber, onGameOver }) => {
                 </View>
             </View>
         </View>
+    </Fragment>
 
+    //landscape view => condition may be width > height 
+    if (width > 500) {
+        content = <Fragment>
+            <View style={styles.buttonContainerWide}>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton onPress={nextGuessHandler.bind(this, 'lower')}>
+                        <Ionicons name='md-add' size={24} color='white' />
+                    </PrimaryButton>
+                </View>
+                <NumberContainer>{currentGuess}</NumberContainer>
+                <View style={styles.buttonContainer}>
+                    <PrimaryButton onPress={nextGuessHandler.bind(this, 'greater')}>
+                        <Ionicons name='md-remove' size={24} color='white' />
+                    </PrimaryButton>
+                </View>
+               
+            </View>
+        </Fragment>
+    }
+
+    return <View style={styles.screen}>
+        <Title>Opponent's Guess</Title>
+        {content}
         {/* {guessRounds.map(guessRound => <Text key={guessRound}>{guessRound}</Text>)} */}
         <View style={styles.listContainer}>
             <FlatList
@@ -100,7 +128,7 @@ const GameScreen = ({ userNumber, onGameOver }) => {
 }
 
 export default GameScreen;
-const deviceWidth = Dimensions.get('window').width; 
+const deviceWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
@@ -121,7 +149,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: 24,
         padding: 16,
-        marginTop: deviceWidth < 380 ? 18: 36,
+        marginTop: deviceWidth < 380 ? 18 : 36,
         backgroundColor: Colors.primary800,
         borderRadius: 8,
         elevation: 10, // andoriod boxshadow
@@ -130,7 +158,12 @@ const styles = StyleSheet.create({
         shadowRadius: 6,// ios boxShadow
         shadowOpacity: 0.25, // ios boxShadow
     },
-    listContainer:{
+    buttonContainerWide:{
+        flexDirection: 'row',
+        alignItems: 'center',
+
+    },
+    listContainer: {
         flex: 1,
         padding: 16
     }

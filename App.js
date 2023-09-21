@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import { StyleSheet, ImageBackground, SafeAreaView } from 'react-native';
 import StartGameScreen from './screens/startGameScreen';
 import GameScreen from './screens/GameScreen';
 import GameOverScreen from './screens/GameOverScreen';
 import { LinearGradient } from 'expo-linear-gradient';
 import Colors from './constants/Colors';
-import {useFonts} from 'expo-font';
+import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
   const [userNamber, setUserNumber] = useState();
@@ -18,7 +19,7 @@ export default function App() {
     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
   });
 
-  if(!fontsLoaded){
+  if (!fontsLoaded) {
     return <AppLoading />
   }
 
@@ -33,11 +34,11 @@ export default function App() {
 
   }
   const Screen = () => {
-    if(gameIsOver && userNamber){
-      return <GameOverScreen roundsNumber={guessRounds} userNumber={userNamber} onStartNewGame={StartNewGameHandler}/>
+    if (gameIsOver && userNamber) {
+      return <GameOverScreen roundsNumber={guessRounds} userNumber={userNamber} onStartNewGame={StartNewGameHandler} />
     }
     if (userNamber) {
-      return screen = <GameScreen  userNumber={userNamber} onGameOver={gameOverHandler}/>
+      return screen = <GameScreen userNumber={userNamber} onGameOver={gameOverHandler} />
     }
     return <StartGameScreen onPickNumber={pickedNumberHandler} />
   }
@@ -47,18 +48,21 @@ export default function App() {
     setGuessRounds(numberOfRounds);
   }
   return (
-    <LinearGradient colors={[Colors.primary700, Colors.accent500]} style={styles.rootScreen}>
-      <ImageBackground
-        source={require('./assets/images/dices.jpg')}
-        resizeMode='cover'
-        style={styles.rootScreen}
-        imageStyle={styles.backgroundImage}>
-        <SafeAreaView style={styles.rootScreen}> 
-          <Screen />
-        </SafeAreaView>
-        {/* SafeAreaView used to make content not hidden by mobile pad that may contain mobile camera  */}
-      </ImageBackground>
-    </LinearGradient>
+    <Fragment>
+      <StatusBar style='light'/>
+      <LinearGradient colors={[Colors.primary700, Colors.accent500]} style={styles.rootScreen}>
+        <ImageBackground
+          source={require('./assets/images/dices.jpg')}
+          resizeMode='cover'
+          style={styles.rootScreen}
+          imageStyle={styles.backgroundImage}>
+          <SafeAreaView style={styles.rootScreen}>
+            <Screen />
+          </SafeAreaView>
+          {/* SafeAreaView used to make content not hidden by mobile pad that may contain mobile camera  */}
+        </ImageBackground>
+      </LinearGradient>
+    </Fragment>
   );
 }
 
